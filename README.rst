@@ -6,7 +6,7 @@ phypy
 .. image:: https://img.shields.io/pypi/v/phypy.svg
         :target: https://pypi.python.org/pypi/phypy
 
-.. image:: https://img.shields.io/travis/ctarver/phypy.svg
+.. image:: https://travis-ci.com/ctarver/phypy.svg?branch=master
         :target: https://travis-ci.com/ctarver/phypy
 
 .. image:: https://readthedocs.org/projects/phypy/badge/?version=latest
