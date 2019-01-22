@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Chance Tarver <tarver.chance@gmail.>
+* Chance Tarver <tarver.chance@gmail.com>
 
 Contributors
 ------------
