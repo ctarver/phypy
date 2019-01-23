@@ -26,12 +26,8 @@ Library of tools for wireless, physical layer research, simulations, and testing
 Features
 --------
 
-* TODO
+* A power amplifier model with realistic coefficients extracted from a WARPv3 board PA.
 
-Todo
-------
-
-.. todolist::
 
 Credits
 -------
