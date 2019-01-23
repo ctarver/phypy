@@ -29,7 +29,7 @@ def test_pa_setup():
     assert pa.k2 == 0
 
 
-def test_pa_transmission_with_unit_coeff()
+def test_pa_transmission_with_unit_coeff():
     """Test that the pa output is equal to the pa input if there is only a 1 in the 1st order term"""
     pa = analog.PowerAmp(order=7, noise_variance=0, add_iq_imbalance=False, add_lo_leakage=False)
     pa.coeffs = np.zeros(pa.coeffs.shape)
