@@ -15,7 +15,8 @@ class OFDM:
         symbol_alphabet: The constellation points
     """
 
-    def __init__(self, n_subcarriers, subcarrier_spacing, cp_length, constellation):
+    def __init__(self, n_subcarriers: int = 1200, subcarrier_spacing: int = 15000,
+                 cp_length: int = 144, constellation: str = 'QPSK'):
         """OFDM Modulator Constructor.
 
         Construct an OFDM Modulator with custom number of subcarriers, subcarrier spacing, cyclic prefix length,
@@ -23,8 +24,8 @@ class OFDM:
 
         Args:
             n_subcarriers: Number of subcarriers per OFDM symbol
-            subcarrier_spacing: Description of `param3`.
-            cp_length: Description of `param3`.
+            subcarrier_spacing: Spacing of the subcarriers in the frequency domain in Hertz
+            cp_length: Number of samples in cyclic prefix
             constellation: Type of constellation used on each subcarrier. QPSK, 16QAM or 64QAM
         """
         self.n_subcarriers = n_subcarriers
@@ -36,7 +37,7 @@ class OFDM:
         self.sampling_rate = self.subcarrier_spacing * self.fft_size
         self.symbol_alphabet = self.QAM_Alphabet(constellation)
 
-    def use(self, n_symbols):
+    def use(self, n_symbols: int = 10):
         """Use the OFDM modulator to generate a random signal.
 
         Args:

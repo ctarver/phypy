@@ -74,6 +74,7 @@ class PowerAmp:
 
     @property
     def n_coeffs(self):
+        """"Total number of coefficients including the polynomial order and memory depth"""
         return np.floor_divide(self.memory_depth * (self.order + 1), 2)
 
 
