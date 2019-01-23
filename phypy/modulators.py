@@ -1,3 +1,9 @@
+"""Modulator Module that implements various wireless modulators
+
+These modulators are meant to turn arbitrary bit patterns to analog waveforms for wireless
+transmission.
+"""
+
 import numpy as np
 
 
@@ -13,14 +19,18 @@ class OFDM:
         fft_size: Size of the IFFT/FFT used.
         sampling_rate: The native sampling rate based on the FFT size and subcarrier spacing
         symbol_alphabet: The constellation points
+
+    Todo:
+        - Add an arbitrary bit input
+        - Add a demodulator
     """
 
     def __init__(self, n_subcarriers: int = 1200, subcarrier_spacing: int = 15000,
                  cp_length: int = 144, constellation: str = 'QPSK'):
         """OFDM Modulator Constructor.
 
-        Construct an OFDM Modulator with custom number of subcarriers, subcarrier spacing, cyclic prefix length,
-        and constellation on each subcarrier.
+        Construct an OFDM Modulator with custom number of subcarriers, subcarrier spacing,
+        cyclic prefix length, and constellation on each subcarrier.
 
         Args:
             n_subcarriers: Number of subcarriers per OFDM symbol
@@ -33,9 +43,8 @@ class OFDM:
         self.cp_length = cp_length
 
         self.fft_size = np.power(2, np.int(np.ceil(np.log2(n_subcarriers))))
-        np.int(np.ceil(np.log2(n_subcarriers)))
         self.sampling_rate = self.subcarrier_spacing * self.fft_size
-        self.symbol_alphabet = self.QAM_Alphabet(constellation)
+        self.symbol_alphabet = self.qam_alphabet(constellation)
 
     def use(self, n_symbols: int = 10):
         """Use the OFDM modulator to generate a random signal.
@@ -55,7 +64,7 @@ class OFDM:
         out = np.zeros((self.fft_size + self.cp_length, n_symbols), dtype='complex64')
         for index, symbol in enumerate(fd_symbols.T):
             td_waveform = self.frequency_to_time_domain(symbol)
-            out[:, index] = self.add_cyclic_prefic(td_waveform)
+            out[:, index] = self.add_cyclic_prefix(td_waveform)
 
         return out.flatten(1)
 
@@ -70,13 +79,18 @@ class OFDM:
         """
         # TODO: Verify that the RB are mapping to the IFFT input correctly
         ifft_input = np.zeros((self.fft_size), dtype='complex64')
-        # Index 0 is DC. Leave blank. The 1st half needs to be in negative frequency so they go in the last IFFT inputs.
-        ifft_input[1: np.int(self.n_subcarriers / 2)] = fd_symbol[np.int(self.n_subcarriers / 2) + 1:]
-        ifft_input[-np.int(self.n_subcarriers / 2):] = fd_symbol[:np.int(self.n_subcarriers / 2)]
+        # Index 0 is DC. Leave blank. The 1st half needs to be in negative frequency
+        # so they go in the last IFFT inputs.
+        ifft_input[1: np.int(self.n_subcarriers / 2)] = \
+            fd_symbol[np.int(self.n_subcarriers / 2) + 1:]
+        ifft_input[-np.int(self.n_subcarriers / 2):] = \
+            fd_symbol[:np.int(self.n_subcarriers / 2)]
         return np.fft.ifft(ifft_input)
 
     def add_cyclic_prefix(self, td_waveform):
-        """Adds cyclic prefix by taking the last few samples and appends it to the beginning of the signal
+        """Adds cyclic prefix
+
+        Adds by taking the last few samples and appending it to the beginning of the signal
 
         Args:
             td_waveform: IFFT output signal.
@@ -92,7 +106,7 @@ class OFDM:
         return out
 
     @staticmethod
-    def qam_alphabet(self, constellation):
+    def qam_alphabet(constellation):
         """Returns constellation points for QPSK, 16QAM, or 64 QAM
 
         Args:

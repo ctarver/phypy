@@ -58,7 +58,7 @@ class PowerAmp:
         """Transmit a signal through the PA object"""
         x = self.k1*x + self.k2*np.conj(x)
         X = self.setup_basis_matrix(x)
-        coeffs = self.coeffs.flatten().copy()  # TODO: Check if need 'F' or not
+        coeffs = self.coeffs.flatten().copy()
         return np.dot(X, coeffs) + self.noise_variance*np.random.rand(x.size)
 
     def setup_basis_matrix(self, x):
@@ -79,6 +79,7 @@ class PowerAmp:
 
 
 class PAError(Exception):
+    """Exceptions for Errors related to the Power Amplifier Construction and use"""
     pass
 
 
