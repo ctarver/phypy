@@ -13,7 +13,7 @@ class OFDM:
     This class will set up an OFDM modulator to create random OFDM signals.
 
     Attributes:
-        n_subcarriers:  Number of subcarriers per OFDM symbol
+        n_subcarriers: Number of subcarriers per OFDM symbol
         subcarrier_spacing: Spacing between subcarriers in Hz
         cp_length : Number of samples in the cyclic prefix
         fft_size: Size of the IFFT/FFT used.
