@@ -65,12 +65,33 @@ class PowerAmp:
         """Setup a matrix of the signal and delayed replicas for multiplication by the coeffs"""
         X = np.zeros((x.size, self.n_coeffs), dtype=np.complex64)
         column_index = 0
-        for order in range(1, self.order, 2):
+        for order in range(1, self.order + 1, 2):
             branch = np.multiply(x, np.power(np.abs(x), (order-1)))
             for delay in range(0, self.memory_depth):
                 X[:, column_index] = np.resize(np.insert(branch, 0, np.zeros(delay)), branch.size)
                 column_index += 1
         return X
+
+    def make_new_model(self, pa_input, pa_output):
+        """Learn new coefficients based on pa_inputs and pa_outputs"""
+        self.coeffs = self.perform_least_squares(pa_input, pa_output).reshape(self.coeffs.shape)
+        model_pa_output = self.transmit(pa_input)
+        self.nmse_of_fit = self.calculate_nmse(pa_output, model_pa_output)
+
+    def perform_least_squares(self, x, y):
+        """Perform a least squares fit"""
+        X = self.setup_basis_matrix(x)
+        lamb = 0.0001
+        coeffs, residuals, rank, s = np.linalg.lstsq(X.T.dot(X) + lamb * np.identity(self.n_coeffs), X.T.dot(y))
+        return coeffs
+
+    @staticmethod
+    def calculate_nmse(desired, actual):
+        """Calculate the normalized mean squared error
+        Todo:
+            - Check this. I think I need to divide by number of samples
+        """
+        return np.linalg.norm(desired-actual)**2 / np.linalg.norm(desired)**2
 
     @property
     def n_coeffs(self):
@@ -86,9 +107,13 @@ class PAError(Exception):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    pa = PowerAmp(order=7)
+    pa = PowerAmp(order=7, noise_variance=0, add_iq_imbalance=False, add_lo_leakage=False)
+    pa.coeffs = np.zeros(pa.coeffs.shape)
+    pa.coeffs[(0, 0)] = 1
     x = np.exp(1j * (2 * np.pi * 1e6 * np.arange(100)/10e6))
     y = pa.transmit(x)
+    pa.make_new_model(x, y)
+
     plt.plot(x.real)
     plt.plot(y.real)
     plt.show()
