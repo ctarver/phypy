@@ -129,3 +129,8 @@ class OFDM:
         const_qam = A + 1j * B
         alphabet = const_qam.flatten(1)
         return alphabet
+
+
+if __name__ == "__main__":
+    ofdm = OFDM()
+    x = ofdm.use()
