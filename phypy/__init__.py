@@ -9,6 +9,6 @@ __version__ = '0.1.1'
 from . import analog
 from . import corrections
 from . import modulators
+from . import dsp
 
-
-__all__ = ['analog', 'corrections', 'modulators']
+__all__ = ['analog', 'corrections', 'modulators', 'dsp']

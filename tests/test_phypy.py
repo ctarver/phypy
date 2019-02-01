@@ -7,7 +7,7 @@ import pytest
 import numpy as np
 from phypy import analog
 from phypy import modulators as mods
-
+from phypy import dsp
 
 def test_even_pa_order():
     with pytest.raises(analog.PAError):
@@ -58,3 +58,18 @@ def test_ofdm_setup_lte_5mhz():
     assert ofdm.fft_size == 512
     assert ofdm.sampling_rate == 7.68e6  # MHz
     assert (ofdm.symbol_alphabet == np.array([-1+1j, -1-1j, 1+1j, 1-1j])).all()
+
+
+def test_freq_shift():
+    """ Test the frequency shift. A 1 MHz signal shifted by 1 MHz should be a 2 MHz signal"""
+    sampling_rate = 20e6  # 20 MHz
+    sin_freq = 1e6  # 1 MHz sinusoid
+    seconds = 0.00001  # 0.01 ms of data
+
+    sampling_period = 1/sampling_rate
+    t_array = np.arange(start=0, stop=seconds, step=sampling_period)
+    samples = np.exp(2*np.pi*1j*sin_freq*t_array)
+    y = dsp.frequency_shift(samples, shift_amount=1e6, sampling_rate=sampling_rate)
+    two_mhz_sin = np.exp(2*np.pi*1j*(2*sin_freq)*t_array)
+    error = np.square(np.abs(two_mhz_sin - y)).mean()
+    assert error < 1e-20
