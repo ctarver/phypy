@@ -20,19 +20,18 @@ phypy.corrections module
     :undoc-members:
     :show-inheritance:
 
-phypy.modulators module
------------------------
+phypy.dsp module
+----------------
 
-.. automodule:: phypy.modulators
+.. automodule:: phypy.dsp
     :members:
     :undoc-members:
     :show-inheritance:
 
-
 phypy.modulators module
 -----------------------
 
-.. automodule:: phypy.dsp
+.. automodule:: phypy.modulators
     :members:
     :undoc-members:
     :show-inheritance:
