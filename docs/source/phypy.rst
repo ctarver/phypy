@@ -29,6 +29,15 @@ phypy.modulators module
     :show-inheritance:
 
 
+phypy.modulators module
+-----------------------
+
+.. automodule:: phypy.dsp
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 Module contents
 ---------------
 
