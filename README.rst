@@ -7,7 +7,7 @@ phypy
         :target: https://pypi.python.org/pypi/phypy
 
 .. image:: https://travis-ci.com/ctarver/phypy.svg?branch=master
-        :target: https://travis-ci.com/ctarver/phypy
+        :target: https://travis-ci.org/ctarver/phypy.svg
 
 .. image:: https://readthedocs.org/projects/phypy/badge/?version=latest
         :target: https://phypy.readthedocs.io/en/latest/?badge=latest
