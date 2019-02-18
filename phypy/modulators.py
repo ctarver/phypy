@@ -26,7 +26,7 @@ class OFDM:
     """
 
     def __init__(self, n_subcarriers: int = 1200, subcarrier_spacing: int = 15000,
-                 cp_length: int = 144, constellation: str = 'QPSK'):
+                 cp_length: int = 144, constellation: str = 'QPSK', seed: int = 0):
         """OFDM Modulator Constructor.
 
         Construct an OFDM Modulator with custom number of subcarriers, subcarrier spacing,
@@ -37,6 +37,7 @@ class OFDM:
             subcarrier_spacing: Spacing of the subcarriers in the frequency domain in Hertz
             cp_length: Number of samples in cyclic prefix
             constellation: Type of constellation used on each subcarrier. QPSK, 16QAM or 64QAM
+            seed: Seed for the random number generator
         """
         self.n_subcarriers = n_subcarriers
         self.subcarrier_spacing = subcarrier_spacing
@@ -45,6 +46,7 @@ class OFDM:
         self.fft_size = np.power(2, np.int(np.ceil(np.log2(n_subcarriers))))
         self.sampling_rate = self.subcarrier_spacing * self.fft_size
         self.symbol_alphabet = self.qam_alphabet(constellation)
+        self.seed = seed
 
     def use(self, n_symbols: int = 10):
         """Use the OFDM modulator to generate a random signal.
@@ -58,7 +60,7 @@ class OFDM:
         TODO:
             - Allow to pass in an arbitrary bit pattern for modulation.
         """
-
+        np.random.seed(self.seed)
         fd_symbols = self.symbol_alphabet[
             np.random.randint(self.symbol_alphabet.size, size=(self.n_subcarriers, n_symbols))]
         out = np.zeros((self.fft_size + self.cp_length, n_symbols), dtype='complex64')
