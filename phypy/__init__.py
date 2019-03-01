@@ -4,7 +4,7 @@
 
 __author__ = """Chance Tarver"""
 __email__ = 'tarver.chance@gmail.com'
-__version__ = '__version__ = '__version__ = '0.2.2'''
+__version__ = '0.2.2'
 
 from . import analog
 from . import corrections
