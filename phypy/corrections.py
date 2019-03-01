@@ -1,6 +1,6 @@
 """Module for performing corrections on impairments related  to the PHY such as DPD"""
 import numpy as np
-import analog
+from . import analog
 
 
 class ILA_DPD(analog.PowerAmp):
