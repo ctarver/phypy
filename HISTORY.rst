@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.2 (2019-03-01)
+------------------------
+* Includes what is probably a working DPD
+
 0.2.1 (2019-02-18)
 -----------------------
 * Adds a random number seed to OFDM
@@ -19,5 +23,4 @@ History
 
 0.1.0 (2019-01-22)
 ------------------
-
 * First release on PyPI.
