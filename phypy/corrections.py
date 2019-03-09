@@ -17,7 +17,7 @@ class ILA_DPD(analog.PowerAmp):
                          noise_variance=0)
         # Make the 1st coeff 1 to have a completely linear DPD with 0 effect
         self.coeffs = np.zeros(shape=self.coeffs.shape)
-        self.coeffs[0] = 1
+        self.coeffs[0,0] = 1
 
     def perform_learning(self, pa, signal):
         """Learn a new DPD model for a given pa"""
