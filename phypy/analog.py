@@ -82,7 +82,7 @@ class PowerAmp:
         """Perform a least squares fit"""
         X = self.setup_basis_matrix(x)
         lamb = 0.0001
-        coeffs, residuals, rank, s = np.linalg.lstsq(X.T.dot(X) + lamb * np.identity(self.n_coeffs), X.T.dot(y))
+        coeffs, residuals, rank, s = np.linalg.lstsq(X.T.dot(X) + lamb * np.identity(self.n_coeffs), X.T.dot(y), rcond=None)
         return coeffs
 
     @staticmethod
