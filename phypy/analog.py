@@ -79,10 +79,15 @@ class PowerAmp:
         self.nmse_of_fit = self.calculate_nmse(pa_output, model_pa_output)
 
     def perform_least_squares(self, x, y):
-        """Perform a least squares fit"""
+        """Perform a least squares fit
+        Todo:
+            - Add support for regularized LS.
+        """
         X = self.setup_basis_matrix(x)
-        lamb = 0.0001
-        coeffs, residuals, rank, s = np.linalg.lstsq(X.T.dot(X) + lamb * np.identity(self.n_coeffs), X.T.dot(y), rcond=None)
+        #lamb = 0.0001
+        #coeffs, residuals, rank, s = np.linalg.lstsq(X.T.dot(X) + lamb * np.identity(self.n_coeffs),
+        # X.T.dot(y), rcond=None)
+        coeffs = np.linalg.lstsq(X, y, rcond=None)[0]
         return coeffs
 
     @staticmethod
