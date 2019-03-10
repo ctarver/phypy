@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.3 (2019-03-10)
+--------------------
+* Fix an issue where the memory taps in DPD were defaulting to "1" instead of 0.
+* Change to plain LS since I didn't trust the regularization
+
+
 0.2.2 (2019-03-01)
 ------------------------
 * Includes what is probably a working DPD
