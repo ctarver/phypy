@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.4 (2019-03-10)
+-------------------
+* Fix an issue where the DPD was limited to 7th order with 4 taps. 
+
 0.2.3 (2019-03-10)
 --------------------
 * Fix an issue where the memory taps in DPD were defaulting to "1" instead of 0.
