@@ -19,7 +19,8 @@ class ILA_DPD(analog.PowerAmp):
         super().__init__(order, memory_depth, add_iq_imbalance=False, add_lo_leakage=False,
                          noise_variance=0)
         # Make the 1st coeff 1 to have a completely linear DPD with 0 effect
-        self.coeffs = np.zeros(shape=self.coeffs.shape)
+        n_rows = np.floor_divide(self.order + 1, 2)
+        self.coeffs = np.zeros(shape=(n_rows, self.memory_depth))
         self.coeffs[0,0] = 1
 
     def perform_learning(self, pa, signal):
