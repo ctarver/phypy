@@ -11,4 +11,4 @@ from . import corrections
 from . import modulators
 from . import dsp
 
-__all__ = ['analog', 'corrections', 'modulators', 'dsp']
+__all__ = ['analog', 'corrections', 'modulators', 'dsp', 'structures']

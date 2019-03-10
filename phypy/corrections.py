@@ -1,27 +1,26 @@
 """Module for performing corrections on impairments related  to the PHY such as DPD"""
 import numpy as np
 try:
-    from . import analog
+    from .structures import MemoryPolynomial
 except:
-    import analog
+    from structures import MemoryPolynomial
 
 
-class ILA_DPD(analog.PowerAmp):
+class ILA_DPD(MemoryPolynomial):
     """Implements a DPD object that uses an indirect learning architecture (ILA)
 
     Implements a digital predistorter (DPD) that uses an indirect learning architecture (ILA)
     and a parallel hammerstein, memory polynomial structure that acts as an inverse of the PA model.
 
     """
-    def __init__(self, order: int = 5, memory_depth: int = 1, n_iterations: int = 2):
+    def __init__(self, order: int = 5, memory_depth: int = 1, memory_stride: int = 5, n_iterations: int = 2):
         self.n_iterations = n_iterations
 
-        super().__init__(order, memory_depth, add_iq_imbalance=False, add_lo_leakage=False,
-                         noise_variance=0)
+        super().__init__(order, memory_depth, memory_stride)
+
         # Make the 1st coeff 1 to have a completely linear DPD with 0 effect
-        n_rows = np.floor_divide(self.order + 1, 2)
-        self.coeffs = np.zeros(shape=(n_rows, self.memory_depth))
-        self.coeffs[0,0] = 1
+        self.coeffs = np.zeros(shape=(self.n_rows, self.memory_depth))
+        self.coeffs[0, 0] = 1
 
     def perform_learning(self, pa, signal):
         """Learn a new DPD model for a given pa"""
@@ -42,6 +41,7 @@ class ILA_DPD(analog.PowerAmp):
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import modulators
+    import analog
 
     dpd = ILA_DPD()
 
