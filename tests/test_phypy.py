@@ -9,16 +9,6 @@ from phypy import analog
 from phypy import modulators as mods
 from phypy import dsp
 
-def test_even_pa_order():
-    with pytest.raises(analog.PAError):
-        analog.PowerAmp(order=4)
-
-
-def test_negative_pa_order():
-    with pytest.raises(analog.PAError):
-        analog.PowerAmp(order=-4)
-
-
 def test_pa_setup():
     pa = analog.PowerAmp(order=5, memory_depth=2, noise_variance=0.01, add_lo_leakage=False, add_iq_imbalance=False)
     assert pa.order == 5

@@ -2,7 +2,10 @@
 
 """Module for performing 'analog' related PHY tasks such as the power amplifier"""
 import numpy as np
-from structures import MemoryPolynomial
+try:
+    from .structures import MemoryPolynomial
+except:
+    from structures import MemoryPolynomial
 
 
 class PowerAmp(MemoryPolynomial):
@@ -51,8 +54,6 @@ class PowerAmp(MemoryPolynomial):
     def transmit(self, x):
         x = self.k1*x + self.k2*np.conj(x)
         return super().transmit(x) + self.noise_variance*np.random.rand(x.size)
-
-
 
     def make_new_model(self, pa_input, pa_output):
         """Learn new coefficients based on pa_inputs and pa_outputs"""
