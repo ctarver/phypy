@@ -2,6 +2,11 @@
 History
 =======
 
+0.2.5 (2019-03-10)
+------------------
+* Make it so the MemoryPolynomial is a superclass for PAs and DPDs
+* Add a memory_stride parameter for memory polynomial modeling
+
 0.2.4 (2019-03-10)
 -------------------
 * Fix an issue where the DPD was limited to 7th order with 4 taps. 
