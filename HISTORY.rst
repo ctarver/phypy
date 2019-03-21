@@ -2,6 +2,11 @@
 History
 =======
 
+0.2.6 (2019-03-21)
+------------------
+* Added Demodulation to OFDM
+* Added EVM calculation to demodulation
+
 0.2.5 (2019-03-10)
 ------------------
 * Make it so the MemoryPolynomial is a superclass for PAs and DPDs
