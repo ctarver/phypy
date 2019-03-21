@@ -47,6 +47,7 @@ class OFDM:
         self.sampling_rate = self.subcarrier_spacing * self.fft_size
         self.symbol_alphabet = self.qam_alphabet(constellation)
         self.seed = seed
+        self.fd_symbols = None  # We'll hold the last TX symbols for calculating error later
 
     def use(self, n_symbols: int = 10):
         """Use the OFDM modulator to generate a random signal.
@@ -61,10 +62,10 @@ class OFDM:
             - Allow to pass in an arbitrary bit pattern for modulation.
         """
         np.random.seed(self.seed)
-        fd_symbols = self.symbol_alphabet[
+        self.fd_symbols = self.symbol_alphabet[
             np.random.randint(self.symbol_alphabet.size, size=(self.n_subcarriers, n_symbols))]
         out = np.zeros((self.fft_size + self.cp_length, n_symbols), dtype='complex64')
-        for index, symbol in enumerate(fd_symbols.T):
+        for index, symbol in enumerate(self.fd_symbols.T):
             td_waveform = self.frequency_to_time_domain(symbol)
             out[:, index] = self.add_cyclic_prefix(td_waveform)
 
@@ -89,6 +90,13 @@ class OFDM:
             fd_symbol[:np.int(self.n_subcarriers / 2)]
         return np.fft.ifft(ifft_input)
 
+    def time_to_frequency_domain(self, td_symbol):
+        full_fft_output = np.fft.fft(td_symbol, axis=0)
+        fd_symbols = np.zeros(shape=self.fd_symbols.shape)
+        fd_symbols[np.int(self.n_subcarriers / 2) + 1:, :] = full_fft_output[1:np.int(self.n_subcarriers/2), :]
+        fd_symbols[:np.int(self.n_subcarriers / 2), :] = full_fft_output[-np.int(self.n_subcarriers / 2):, :]
+        return fd_symbols
+
     def add_cyclic_prefix(self, td_waveform):
         """Adds cyclic prefix
 
@@ -106,6 +114,10 @@ class OFDM:
         out[self.cp_length:] = td_waveform
         out[:self.cp_length] = td_waveform[-self.cp_length:]
         return out
+
+    def remove_cyclic_prefix(self, td_grid):
+        w_out_cp = td_grid[-self.fft_size:, :]
+        return w_out_cp
 
     @staticmethod
     def qam_alphabet(constellation):
@@ -133,6 +145,27 @@ class OFDM:
         return alphabet
 
 
+    def demodulate(self, time_domain_rx_signal):
+        """Demodulate a time domain signal back into the FD symbols"""
+
+        # Reorganize to grid
+        _, n_symbols = self.fd_symbols.shape
+        td_grid = np.reshape(time_domain_rx_signal, (self.fft_size+self.cp_length, n_symbols), order='F')
+        td_grid = self.remove_cyclic_prefix(td_grid)
+        fd_symbols = self.time_to_frequency_domain(td_grid)
+        evm = self.calculate_evm(fd_symbols)
+        return fd_symbols, evm
+
+    def calculate_evm(self, fd_rx_signal):
+        # Get error vectors
+        e = fd_rx_signal - self.fd_symbols
+        e_avg = np.linalg.norm(e) / e.size
+        avg_power = np.sum(np.absolute(self.fd_symbols)) / e.size
+        evm = 100 * e_avg / avg_power
+        return evm
+
 if __name__ == "__main__":
     ofdm = OFDM()
     x = ofdm.use()
+    y, evm_percent = ofdm.demodulate(x)
+    1 + 1
