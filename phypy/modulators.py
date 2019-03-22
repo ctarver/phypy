@@ -84,16 +84,16 @@ class OFDM:
         ifft_input = np.zeros((self.fft_size), dtype='complex64')
         # Index 0 is DC. Leave blank. The 1st half needs to be in negative frequency
         # so they go in the last IFFT inputs.
-        ifft_input[1: np.int(self.n_subcarriers / 2)] = \
-            fd_symbol[np.int(self.n_subcarriers / 2) + 1:]
+        ifft_input[1: np.int(self.n_subcarriers / 2) + 1] = \
+            fd_symbol[np.int(self.n_subcarriers / 2):]
         ifft_input[-np.int(self.n_subcarriers / 2):] = \
             fd_symbol[:np.int(self.n_subcarriers / 2)]
         return np.fft.ifft(ifft_input)
 
     def time_to_frequency_domain(self, td_symbol):
         full_fft_output = np.fft.fft(td_symbol, axis=0)
-        fd_symbols = np.zeros(shape=self.fd_symbols.shape)
-        fd_symbols[np.int(self.n_subcarriers / 2) + 1:, :] = full_fft_output[1:np.int(self.n_subcarriers/2), :]
+        fd_symbols = np.zeros(shape=self.fd_symbols.shape, dtype='complex64')
+        fd_symbols[np.int(self.n_subcarriers / 2):, :] = full_fft_output[1:np.int(self.n_subcarriers/2) + 1, :]
         fd_symbols[:np.int(self.n_subcarriers / 2), :] = full_fft_output[-np.int(self.n_subcarriers / 2):, :]
         return fd_symbols
 
