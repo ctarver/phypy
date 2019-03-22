@@ -159,9 +159,7 @@ class OFDM:
     def calculate_evm(self, fd_rx_signal):
         # Get error vectors
         e = fd_rx_signal - self.fd_symbols
-        e_avg = np.linalg.norm(e) / e.size
-        avg_power = np.sum(np.absolute(self.fd_symbols)) / e.size
-        evm = 100 * e_avg / avg_power
+        evm = 100 * np.linalg.norm(e) / np.linalg.norm(self.fd_symbols)
         return evm
 
 if __name__ == "__main__":
