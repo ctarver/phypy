@@ -36,6 +36,14 @@ phypy.modulators module
     :undoc-members:
     :show-inheritance:
 
+phypy.structures module
+-----------------------
+
+.. automodule:: phypy.structures
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

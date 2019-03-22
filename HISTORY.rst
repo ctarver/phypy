@@ -2,6 +2,11 @@
 History
 =======
 
+0.2.7 (2019-03-22)
+------------------
+* Fix OFDM modulation and Demodulation dropping the middle subcarrier
+* Fix EVM calculation 
+
 0.2.6 (2019-03-21)
 ------------------
 * Added Demodulation to OFDM
