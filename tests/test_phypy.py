@@ -8,7 +8,6 @@ import numpy as np
 
 from click.testing import CliRunner
 
-from phypy import phypy
 from phypy import cli
 from phypy import analog
 from phypy import modulators as mods
