@@ -1,18 +1,22 @@
 =====
-phypy
+PhyPy
 =====
 
 
 .. image:: https://img.shields.io/pypi/v/phypy.svg
         :target: https://pypi.python.org/pypi/phypy
 
-.. image:: https://travis-ci.org/ctarver/phypy.svg?branch=master
+.. image:: https://img.shields.io/travis/ctarver/phypy.svg
         :target: https://travis-ci.org/ctarver/phypy
 
 .. image:: https://readthedocs.org/projects/phypy/badge/?version=latest
         :target: https://phypy.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
+
+.. image:: https://pyup.io/repos/github/ctarver/phypy/shield.svg
+     :target: https://pyup.io/repos/github/ctarver/phypy/
+     :alt: Updates
 
 
 
@@ -26,8 +30,7 @@ Library of tools for wireless, physical layer research, simulations, and testing
 Features
 --------
 
-* A power amplifier model with realistic coefficients extracted from a WARPv3 board PA.
-
+* TODO
 
 Credits
 -------

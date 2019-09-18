@@ -47,7 +47,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'phypy'
+project = u'PhyPy'
 copyright = u"2019, Chance Tarver"
 author = u"Chance Tarver"
 
@@ -129,7 +129,7 @@ latex_elements = {
 # [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'phypy.tex',
-     u'phypy Documentation',
+     u'PhyPy Documentation',
      u'Chance Tarver', 'manual'),
 ]
 
@@ -152,7 +152,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'phypy',
-     u'phypy Documentation',
+     u'PhyPy Documentation',
      author,
      'phypy',
      'One line description of project.',

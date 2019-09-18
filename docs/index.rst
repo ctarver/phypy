@@ -1,4 +1,4 @@
-Welcome to phypy's documentation!
+Welcome to PhyPy's documentation!
 ======================================
 
 .. toctree::

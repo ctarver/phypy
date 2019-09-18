@@ -1,4 +1,4 @@
-* phypy version:
+* PhyPy version:
 * Python version:
 * Operating System:
 
