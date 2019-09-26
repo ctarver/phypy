@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.8 (2019-09-26)
+-------------------
+* Critical fix for LS estimation regarding conjugate transpose
+* Updated cookiecutter template to get new versions of things
+* Started (but unfinished MIMO module)
+
 0.2.7 (2019-03-22)
 ------------------
 * Fix OFDM modulation and Demodulation dropping the middle subcarrier
