@@ -29,10 +29,9 @@ class MemoryPolynomial:
             - Add support for regularized LS.
         """
         X = self.setup_basis_matrix(x)
-        # lamb = 0.0001
-        # coeffs, residuals, rank, s = np.linalg.lstsq(X.T.dot(X) + lamb * np.identity(self.n_coeffs),
-        # X.T.dot(y), rcond=None)
-        coeffs = np.linalg.lstsq(X, y, rcond=None)[0]
+        lamb = 0.0001
+        coeffs = np.linalg.lstsq(np.dot(X.conj().T, X) +  lamb * np.identity(self.n_coeffs),
+                                                     X.conj().T.dot(y), rcond=None)[0]
         return coeffs
 
     def setup_basis_matrix(self, x):
