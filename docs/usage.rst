@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use phypy in a project::
+To use PhyPy in a project::
 
     import phypy

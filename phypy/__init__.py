@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Top-level package for phypy."""
+"""Top-level package for PhyPy."""
 
 __author__ = """Chance Tarver"""
 __email__ = 'tarver.chance@gmail.com'
