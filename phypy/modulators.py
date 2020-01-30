@@ -23,10 +23,12 @@ class OFDM:
     Todo:
         - Add an arbitrary bit input
         - Add a demodulator
+        - Fix it. It's not giving correct outputs
+        - Add windowing
     """
 
     def __init__(self, n_subcarriers: int = 1200, subcarrier_spacing: int = 15000,
-                 cp_length: int = 144, constellation: str = 'QPSK', seed: int = 0):
+                 cp_length: int = 144, constellation: str = 'QPSK', use_windows: bool = True, seed: int = 0):
         """OFDM Modulator Constructor.
 
         Construct an OFDM Modulator with custom number of subcarriers, subcarrier spacing,
@@ -41,13 +43,22 @@ class OFDM:
         """
         self.n_subcarriers = n_subcarriers
         self.subcarrier_spacing = subcarrier_spacing
-        self.cp_length = cp_length
-
         self.fft_size = np.power(2, np.int(np.ceil(np.log2(n_subcarriers))))
         self.sampling_rate = self.subcarrier_spacing * self.fft_size
+        period = 1 / self.sampling_rate
+
+        cp_us_for_each_sb_spacing = {15e3: 4.69, 30e3: 2.34, 60e3: 1.17, 120e3: 0.57, 240e3: 0.29}
+        cp_time_us = cp_us_for_each_sb_spacing[subcarrier_spacing]*1e-6
+        self.cp_length = np.int(np.rint(cp_time_us / period))
+
         self.symbol_alphabet = self.qam_alphabet(constellation)
         self.seed = seed
         self.fd_symbols = None  # We'll hold the last TX symbols for calculating error later
+        if use_windows:
+            window_lengths = {72: 4, 180: 6, 300: 4, 600: 6, 900: 8, 1200: 8}
+            self.window_length = window_lengths.get(n_subcarriers, 8)
+        else:
+            self.window_length = 0
 
     def use(self, n_symbols: int = 10):
         """Use the OFDM modulator to generate a random signal.
@@ -69,7 +80,7 @@ class OFDM:
             td_waveform = self.frequency_to_time_domain(symbol)
             out[:, index] = self.add_cyclic_prefix(td_waveform)
 
-        return out.flatten(1)
+        return out.flatten()
 
     def frequency_to_time_domain(self, fd_symbol):
         """Convert the frequency domain symbol to time domain via IFFT
@@ -141,7 +152,7 @@ class OFDM:
         A = np.kron(np.ones((x + 1, 1)), alpha_n_points)
         B = np.flipud(A.transpose())
         const_qam = A + 1j * B
-        alphabet = const_qam.flatten(1)
+        alphabet = const_qam.flatten()
         return alphabet
 
 
