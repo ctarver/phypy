@@ -57,10 +57,11 @@ class OFDM:
         if use_windows:
             window_lengths = {72: 4, 180: 6, 300: 4, 600: 6, 900: 8, 1200: 8}
             self.window_length = window_lengths.get(n_subcarriers, 8)
+            self.get_window_coeffs()
         else:
             self.window_length = 0
 
-    def use(self, n_symbols: int = 10):
+    def use(self, n_symbols: int = 14):
         """Use the OFDM modulator to generate a random signal.
 
         Args:
@@ -72,15 +73,28 @@ class OFDM:
         TODO:
             - Allow to pass in an arbitrary bit pattern for modulation.
         """
+        self.n_symbols = symbols
         np.random.seed(self.seed)
         self.fd_symbols = self.symbol_alphabet[
             np.random.randint(self.symbol_alphabet.size, size=(self.n_subcarriers, n_symbols))]
         out = np.zeros((self.fft_size + self.cp_length, n_symbols), dtype='complex64')
         for index, symbol in enumerate(self.fd_symbols.T):
             td_waveform = self.frequency_to_time_domain(symbol)
-            out[:, index] = self.add_cyclic_prefix(td_waveform)
+            td_waveform = self.add_cyclic_prefix(td_waveform)
+            out[:, index] = self.add_windows(td_waveform)
 
-        return out.flatten()
+        out = self.create_full_waveform(out)
+        return out
+
+    def create_full_waveform(self, input):
+        N = self.window_length
+        K = self.n_symbols
+        samps_per_symbol = self.fft_size+self.cp_length
+        out = np.zeros((samps_per_symbol*K, 1))
+        out[0:samps_per_symbol-1] = input[N:,1]
+        for i in range(2, K):
+            current_index = i*samps_per_symbol - N
+            out[current_index:current_index+samps_per_symbol+N-1] += input[:, i]
 
     def frequency_to_time_domain(self, fd_symbol):
         """Convert the frequency domain symbol to time domain via IFFT
@@ -125,6 +139,20 @@ class OFDM:
         out[self.cp_length:] = td_waveform
         out[:self.cp_length] = td_waveform[-self.cp_length:]
         return out
+
+    def add_windows(self, input):
+        out = input
+        N = self.window_length
+        if N > 0:
+            out[0:N-1] = input[0:N-1] * self.rrc_taps
+            out[:-N] = input[:-N] * np.flip(self.rrc_taps)
+        return out
+
+    def get_window_coeffs(self):
+        N = self.window_length
+        self.rrc_taps = np.zeros((N, 1))
+        for i, _ in enumerate(self.rrc_taps):
+             self.rrc_taps[i] = 0.5 * (1 - np.sin(np.pi * (N + 1 - 2 * (i+1)) / (2 * N)))
 
     def remove_cyclic_prefix(self, td_grid):
         w_out_cp = td_grid[-self.fft_size:, :]
